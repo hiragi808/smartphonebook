@@ -82,7 +82,7 @@ int main() {
                 break;
 
             case 0:
-                cout << "выход...\n";
+                cout << "выход\n";
                 break;
             default:
                 cout << "неверный выбор!\n";
