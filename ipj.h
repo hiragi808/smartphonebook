@@ -31,8 +31,10 @@ struct phonebook {
 
     void sortbyname();
 
+    void savetofile(string filename);
+
+    bool loadfromfile(string filename);
 
     void displayall();
-
 };
 #endif //IPROJECT_IPJ_H

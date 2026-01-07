@@ -12,6 +12,8 @@ void showmenu() {
     cout << "4. найти контакт\n";
     cout << "5. сортировать по имени\n";
     cout << "6. показать все\n";
+    cout << "7. сохранить в файл\n";
+    cout << "8. загрузить из файла\n";
     cout << "0. выход\n";
     cout << "выберите: ";
 }
@@ -42,7 +44,6 @@ int main() {
                 book.removecontact(name);
                 break;
             }
-
             case 3: {
                 string oldname, newname, newphone, newemail;
                 cout << "какое имя изменить: ";
@@ -82,7 +83,7 @@ int main() {
                 break;
 
             case 0:
-                cout << "выход\n";
+                cout << "выход...\n";
                 break;
             default:
                 cout << "неверный выбор!\n";

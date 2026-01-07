@@ -51,16 +51,68 @@ vector<contact> phonebook::searchbyname(string part) {
             results.push_back(contacts[i]);
         }
     }
-
     return results;
 }
 
 // 5. сортировка по имени
 void phonebook::sortbyname() {
-
+    int n = contacts.size();
+    for (int i = 0; i < n-1; i++) {
+        for (int j = 0; j < n-i-1; j++) {
+            if (contacts[j].name > contacts[j+1].name) {
+                // Меняем местами
+                contact t = contacts[j];
+                contacts[j] = contacts[j+1];
+                contacts[j+1] = t;
+            }
+        }
+    }
+    cout << "контакты отсортированы по имени!\n";
 }
 
-// 6. показ всех контактов
+// 6. сохранение в файл
+void phonebook::savetofile(string filename) {
+    ofstream file(filename);
+    if (!file.is_open()) {
+        cout << "ошибка открытия файла!\n";
+        return;
+    }
+    for (int i = 0; i < contacts.size(); i++) {
+        file << contacts[i].name << ","
+             << contacts[i].phone << ","
+             << contacts[i].email << "\n";
+    }
+    file.close();
+    cout << "сохранено " << contacts.size() << " контактов\n";
+}
+
+// 7. загрузка из файла
+bool phonebook::loadfromfile(string filename) {
+    ifstream file(filename);
+    if (!file) {
+        cout << "Ошибка! Фаил не открыт." << filename << endl;
+        return false;
+    }
+
+    contacts.clear();
+
+    //читаем файл
+    string line;
+    while (getline(file, line)) {
+        int comma1 = line.find(',');//если не найдет то вернет -1
+        int comma2 = -1;
+        if (comma1 != -1) {
+            comma2 = line.find(',', comma1 + 1);
+        }
+        if (comma1 != -1 && comma2 != -1) {
+            contact c(line.substr(0, comma1),
+                     line.substr(comma1 + 1, comma2 - comma1 - 1),
+                     line.substr(comma2 + 1));
+            contacts.push_back(c);
+        }
+    }
+    }
+// 8. показ всех контактов
 void phonebook::displayall() {
     if (contacts.empty()) {
         cout << "телефонная книга пуста!\n";
@@ -77,3 +129,4 @@ void phonebook::displayall() {
              << "email: " << contacts[i].email << "\n";
     }
 }
+
