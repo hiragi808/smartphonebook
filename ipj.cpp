@@ -63,19 +63,19 @@ bool validmail(string mail) {
         return true;
     }
     // должен содержать ровно один символ '@'
-    int atCount = 0;
+    int aсount = 0;
     for (int i = 0; i < mail.length(); i++) {
         if (mail[i] == '@') {
-            atCount++;
+            aсount++;
         }
     }
     // Должен быть ровно один символ '@'
-    if (atCount != 1) {
+    if (aсount != 1) {
         return false;
     }
-    int atPos = mail.find('@');
+    int apos = mail.find('@');
     // '@' не может быть первым или последним символом
-    if (atPos == 0 || atPos == mail.length() - 1) {
+    if (apos == 0 || apos == mail.length() - 1) {
         return false;
     }
     return true;
@@ -198,8 +198,24 @@ void phonebook::sortbyname() {
     }
     cout << "контакты отсортированы по имени!\n";
 }
+// 6. показ всех контактов
+void phonebook::displayall() {
+    if (contacts.empty()) {
+        cout << "телефонная книга пуста!\n";
+        return;
+    }
+    cout << "\n=== телефонная книга ===\n";
+    cout << "всего: " << contacts.size() << " контактов\n";
 
-// 6. сохранение в файл
+    for (int i = 0; i < contacts.size(); i++) {
+        cout << i + 1 << ". "
+             << "имя: " << contacts[i].name << " | "
+             << "тел: " << contacts[i].phone << " | "
+             << "email: " << contacts[i].email << "\n";
+    }
+}
+
+// 7. сохранение в файл
 void phonebook::savetofile(string filename) {
     ofstream file(filename);
     if (!file.is_open()) {
@@ -215,7 +231,7 @@ void phonebook::savetofile(string filename) {
     cout << "сохранено " << contacts.size() << " контактов\n";
 }
 
-// 7. загрузка из файла
+// 8. загрузка из файла
 bool phonebook::loadfromfile(string filename) {
     ifstream file(filename);
     if (!file) {
@@ -241,20 +257,5 @@ bool phonebook::loadfromfile(string filename) {
         }
     }
     }
-// 8. показ всех контактов
-void phonebook::displayall() {
-    if (contacts.empty()) {
-        cout << "телефонная книга пуста!\n";
-        return;
-    }
-    cout << "\n=== телефонная книга ===\n";
-    cout << "всего: " << contacts.size() << " контактов\n";
 
-    for (int i = 0; i < contacts.size(); i++) {
-        cout << i + 1 << ". "
-             << "имя: " << contacts[i].name << " | "
-             << "тел: " << contacts[i].phone << " | "
-             << "email: " << contacts[i].email << "\n";
-    }
-}
 
