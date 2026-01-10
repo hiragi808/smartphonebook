@@ -32,7 +32,7 @@ int main() {
                 getline(cin, name);
                 cout << "телефон: ";
                 getline(cin, phone);
-                cout << "email: ";
+                cout << "email (оставьте пустым, если не нужен): ";
                 getline(cin, email);
                 book.addcontact(name, phone, email);
                 break;
@@ -52,7 +52,7 @@ int main() {
                 getline(cin, newname);
                 cout << "новый телефон: ";
                 getline(cin, newphone);
-                cout << "новый email: ";
+                cout << "новый email (оставьте пустым, если не нужен): ";
                 getline(cin, newemail);
                 book.editcontact(oldname, newname, newphone, newemail);
                 break;
@@ -81,9 +81,32 @@ int main() {
             case 6:
                 book.displayall();
                 break;
-
+            case 7: {
+                cout << "\n--- Сохранение в файл ---\n";
+                string filename;
+                cout << "Введите имя файла для сохранения";
+                getline(cin, filename);
+                if (filename.empty()) {
+                    filename = "contacts.txt";
+                    cout << "Используется имя по умолчанию: " << filename << "\n";
+                }
+                book.savetofile(filename);
+                break;
+            }
+            case 8: {
+                cout << "\n--- Загрузка из файла ---\n";
+                string filename;
+                cout << "Введите имя файла для загрузки: ";
+                getline(cin, filename);
+                if (!filename.empty()) {
+                    book.loadfromfile(filename);
+                } else {
+                    cout << "Ошибка: Имя файла не может быть пустым!\n";
+                }
+                break;
+            }
             case 0:
-                cout << "выход...\n";
+                cout << "выход\n";
                 break;
             default:
                 cout << "неверный выбор!\n";

@@ -6,6 +6,9 @@
 #include <string>
 #include <vector>
 using namespace std;
+bool validname(string name);
+bool validphone(string phone);
+
 // структура контакта
 struct contact {
     string name;

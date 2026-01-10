@@ -4,16 +4,121 @@
 #include "ipj.h"
 #include <iostream>
 #include <fstream>
-
+#include <cctype>
+// функция для очистки строки от лишних пробелов в начале и конце
+string clearspace(string str) {
+    // если строка пустая, сразу возвращаем пустую строку
+    if (str.empty()) {
+        return "";
+    }
+    // находим первый не пробел
+    int start = 0;
+    while (start < str.length()) {
+        char c = str[start];
+        // проверяем является ли символ пробельным
+        if (c != ' ' && c != '\n') {
+            break;
+        }
+        start++;
+    }
+    int end = str.length() - 1;
+    while (end >= 0) {
+        char c = str[end];
+        if (c != ' ' && c != '\n') {
+            break;
+        }
+        end--;
+    }
+    // если все пробелы
+    if (start > end) {
+        return "";
+    }
+    // возвращаем подстроку от start до end включительно
+    return str.substr(start, end - start + 1);
+}
+bool validname(string name) {
+    if (name.empty() || name.length() > 100) return false;
+    // имя должно содержать только буквы, пробелы, дефисы
+    for (char c : name) {
+        if (!isalpha(c) && c != ' ' && c != '-'  && c != '.') {
+            return false;
+        }
+    }
+    return true;
+}
+bool validphone(string phone) {
+    if (phone.empty() || phone.length() > 21) return false;
+    // только цифры, плюс, скобки, дефисы
+    for (char c : phone) {
+        if (!isdigit(c) && c != '+' && c != '(' && c != ')' && c != '-' && c != ' ') {
+            return false;
+        }
+    }
+    return true;
+}
+bool validmail(string mail) {
+    // email не обязателен
+    mail=clearspace(mail);
+    if (mail.empty()) {
+        return true;
+    }
+    // должен содержать ровно один символ '@'
+    int atCount = 0;
+    for (int i = 0; i < mail.length(); i++) {
+        if (mail[i] == '@') {
+            atCount++;
+        }
+    }
+    // Должен быть ровно один символ '@'
+    if (atCount != 1) {
+        return false;
+    }
+    int atPos = mail.find('@');
+    // '@' не может быть первым или последним символом
+    if (atPos == 0 || atPos == mail.length() - 1) {
+        return false;
+    }
+    return true;
+}
 using namespace std;
 // 1. добавление контакта
 void phonebook::addcontact(string name, string phone, string email) {
+    // очистка от лишних пробелов
+    name = clearspace(name);
+    phone = clearspace(phone);
+    email = clearspace(email);
+
+    // Проверка ввода
+    if (name.empty()) {
+        cout << "Ошибка: Имя не может быть пустым!\n";
+        return;
+    }
+    if (!validname(name)) {
+        cout << "Ошибка: Некорректное имя! Используйте только буквы, пробелы, дефисы и апострофы.\n";
+        return;
+    }
+    if (!validphone(phone)) {
+        cout << "Ошибка: Некорректный номер телефона! Должен содержать минимум 5 цифр.\n";
+        return;
+    }
+    // проверка на дубликат имени
+    for (int i = 0; i < contacts.size(); i++) {
+        if (contacts[i].name == name) {
+            cout << "Ошибка: Контакт с именем '" << name << "' уже существует!\n";
+            return;
+        }
+    }
     contact newcontact(name, phone, email);
     contacts.push_back(newcontact);
     cout << "контакт '" << name << "' добавлен!\n";
 }
 // 2. удаление контакта
 bool phonebook::removecontact(string name) {
+    name = clearspace(name);
+    if (name.empty()) {
+        cout << "Ошибка: Имя для удаления не может быть пустым!\n";
+        return false;
+    }
     for (int i = 0; i < contacts.size(); i++) {
         if (contacts[i].name == name) {
             contacts.erase(contacts.begin() + i);
@@ -27,11 +132,34 @@ bool phonebook::removecontact(string name) {
 
 // 3. изменение контакта
 bool phonebook::editcontact(string oldname, string newname,string newphone, string newemail) {
+    oldname = clearspace(oldname);
+    newname = clearspace(newname);
+    newphone = clearspace(newphone);
+    newemail = clearspace(newemail);
     for (int i = 0; i < contacts.size(); i++) {
         if (contacts[i].name == oldname) {
             contacts[i].name = newname;
             contacts[i].phone = newphone;
             contacts[i].email = newemail;
+            if (oldname.empty()) {
+                cout << "Ошибка: Старое имя не может быть пустым!\n";
+                return false;
+            }
+
+            if (newname.empty()) {
+                cout << "Ошибка: Новое имя не может быть пустым!\n";
+                return false;
+            }
+
+            if (!validname(newname)) {
+                cout << "Ошибка: Некорректное новое имя!\n";
+                return false;
+            }
+
+            if (!validphone(newphone)) {
+                cout << "Ошибка: Некорректный новый номер телефона!\n";
+                return false;
+            }
             cout << "контакт изменен!\n";
             cout << "было: " << oldname << "\n";
             cout << "стало: " << newname << "\n";
@@ -45,9 +173,10 @@ bool phonebook::editcontact(string oldname, string newname,string newphone, stri
 // 4. поиск по имени
 vector<contact> phonebook::searchbyname(string part) {
     vector<contact> results;
+    part=clearspace(part);
     for (int i = 0; i < contacts.size(); i++) {
         string fname = contacts[i].name;
-        if (!(fname.find(part))) {
+        if ((fname.find(part))!=-1) {
             results.push_back(contacts[i]);
         }
     }
@@ -118,7 +247,6 @@ void phonebook::displayall() {
         cout << "телефонная книга пуста!\n";
         return;
     }
-
     cout << "\n=== телефонная книга ===\n";
     cout << "всего: " << contacts.size() << " контактов\n";
 
