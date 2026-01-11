@@ -78,7 +78,7 @@ int main() {
             case 7: {
                 cout << "\n--- Сохранение в файл ---\n";
                 string filename;
-                cout << "Введите имя файла для сохранения";
+                cout << "Введите имя файла для сохранения: ";
                 getline(cin, filename);
                 if (filename.empty()) {
                     filename = "contacts.txt";
@@ -103,7 +103,6 @@ int main() {
                 cout << "выход\n";
                 break;
             default:
-                cout << "неверный выбор!\n";
                 cout << "Ошибка! Введите число от 0 до 8!\n";
         }
     } while (choice != 0);
