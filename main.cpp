@@ -9,7 +9,7 @@ int main() {
         showmenu();
         while (true) {
             cin >> choice;
-            if (cin.fail()) {
+            if (cin.fail()) {//если введется не цифра будет требовать повторный ввод
                 cin.clear();
                 cin.ignore(1000, '\n');
                 cout << "Ошибка! Введите число от 0 до 8!\n";

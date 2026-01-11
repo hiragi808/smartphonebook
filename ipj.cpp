@@ -113,12 +113,16 @@ void phonebook::addcontact(string name, string phone, string email) {
         cout << "Ошибка: Имя не может быть пустым!\n";
         return;
     }
-    if (!validname(name)) {
-        cout << "Ошибка: Некорректное имя! Используйте только буквы, пробелы, дефисы и апострофы.\n";
+    if (validname(name)) {
+        cout << "Ошибка: Некорректное имя!\n";
         return;
     }
-    if (!validphone(phone)) {
-        cout << "Ошибка: Некорректный номер телефона! Должен содержать минимум 5 цифр.\n";
+    if (validphone(phone)) {
+        cout << "Ошибка: Некорректный номер телефона! \n";
+        return;
+    }
+    if (validmail(email)) {
+        cout << "Ошибка: Некорректная почта! \n";
         return;
     }
     // проверка на дубликат имени
