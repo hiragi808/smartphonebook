@@ -55,7 +55,6 @@ string clearspace(string str) {
     return str.substr(start, end - start + 1);
 }
 bool validname(string name) {
-    cout<<name<<endl;
     name = clearspace(name);
     if (name.empty() || name.length() > 100) return false;
     // Имя не должно содержать запятую, так как она используется как разделитель в файле
@@ -113,15 +112,15 @@ void phonebook::addcontact(string name, string phone, string email) {
         cout << "Ошибка: Имя не может быть пустым!\n";
         return;
     }
-    if (validname(name)) {
+    if (!validname(name)) {
         cout << "Ошибка: Некорректное имя!\n";
         return;
     }
-    if (validphone(phone)) {
+    if (!validphone(phone)) {
         cout << "Ошибка: Некорректный номер телефона! \n";
         return;
     }
-    if (validmail(email)) {
+    if (!validmail(email)) {
         cout << "Ошибка: Некорректная почта! \n";
         return;
     }
