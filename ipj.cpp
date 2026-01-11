@@ -5,6 +5,19 @@
 #include <iostream>
 #include <fstream>
 #include <cctype>
+void showmenu() {
+    cout << "\n=== телефонная книга ===\n";
+    cout << "1. добавить контакт\n";
+    cout << "2. удалить контакт\n";
+    cout << "3. изменить контакт\n";
+    cout << "4. найти контакт\n";
+    cout << "5. сортировать по имени\n";
+    cout << "6. показать все\n";
+    cout << "7. сохранить в файл\n";
+    cout << "8. загрузить из файла\n";
+    cout << "0. выход\n";
+    cout << "выберите: ";
+}
 // функция для очистки строки от лишних пробелов в начале и конце
 string clearspace(string str) {
     // если строка пустая, сразу возвращаем пустую строку
@@ -22,6 +35,7 @@ string clearspace(string str) {
         start++;
     }
     int end = str.length() - 1;
+    //идем с конца пока найдем не пробел
     while (end >= 0) {
         char c = str[end];
         if (c != ' ' && c != '\n') {
@@ -119,6 +133,7 @@ bool phonebook::removecontact(string name) {
         cout << "Ошибка: Имя для удаления не может быть пустым!\n";
         return false;
     }
+    //проход по вектору и удаление нужного нам
     for (int i = 0; i < contacts.size(); i++) {
         if (contacts[i].name == name) {
             contacts.erase(contacts.begin() + i);
@@ -176,6 +191,8 @@ vector<contact> phonebook::searchbyname(string part) {
     part=clearspace(part);
     for (int i = 0; i < contacts.size(); i++) {
         string fname = contacts[i].name;
+        //если не найдет то вернет -1
+        //если нашло то добавляем в result
         if ((fname.find(part))!=-1) {
             results.push_back(contacts[i]);
         }
@@ -246,13 +263,13 @@ bool phonebook::loadfromfile(string filename) {
     while (getline(file, line)) {
         int comma1 = line.find(',');//если не найдет то вернет -1
         int comma2 = -1;
-        if (comma1 != -1) {
+        if (comma1 != -1) {//если есть 1 запятая то ищем вторую
             comma2 = line.find(',', comma1 + 1);
         }
         if (comma1 != -1 && comma2 != -1) {
-            contact c(line.substr(0, comma1),
-                     line.substr(comma1 + 1, comma2 - comma1 - 1),
-                     line.substr(comma2 + 1));
+            contact c(line.substr(0, comma1),//от начало до первой запятой = имя
+                     line.substr(comma1 + 1, comma2 - comma1 - 1),// от 1 запятой до 2 запятой = номер
+                     line.substr(comma2 + 1));// все остальное почта
             contacts.push_back(c);
         }
     }

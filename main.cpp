@@ -1,23 +1,12 @@
 #include <iostream>
 #include "ipj.h"
-#include <iostream>
+#include <clocale>
 
 using namespace std;
 
-void showmenu() {
-    cout << "\n=== телефонная книга ===\n";
-    cout << "1. добавить контакт\n";
-    cout << "2. удалить контакт\n";
-    cout << "3. изменить контакт\n";
-    cout << "4. найти контакт\n";
-    cout << "5. сортировать по имени\n";
-    cout << "6. показать все\n";
-    cout << "7. сохранить в файл\n";
-    cout << "8. загрузить из файла\n";
-    cout << "0. выход\n";
-    cout << "выберите: ";
-}
+
 int main() {
+    setlocale(LC_ALL,"Russia");
     phonebook book;
     int choice;
     do {
