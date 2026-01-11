@@ -5,6 +5,10 @@
 #include <iostream>
 #include <fstream>
 #include <cctype>
+#include <algorithm>
+#include <clocale>
+using namespace std;
+
 void showmenu() {
     cout << "\n=== телефонная книга ===\n";
     cout << "1. добавить контакт\n";
@@ -51,17 +55,19 @@ string clearspace(string str) {
     return str.substr(start, end - start + 1);
 }
 bool validname(string name) {
+    cout<<name<<endl;
+    name = clearspace(name);
     if (name.empty() || name.length() > 100) return false;
-    // имя должно содержать только буквы, пробелы, дефисы
+    // Имя не должно содержать запятую, так как она используется как разделитель в файле
     for (char c : name) {
-        if (!isalpha(c) && c != ' ' && c != '-'  && c != '.') {
+        if (c == ',') {
             return false;
         }
     }
     return true;
 }
 bool validphone(string phone) {
-    if (phone.empty() || phone.length() > 21) return false;
+    if (phone.empty() || phone.length() > 23) return false;
     // только цифры, плюс, скобки, дефисы
     for (char c : phone) {
         if (!isdigit(c) && c != '+' && c != '(' && c != ')' && c != '-' && c != ' ') {
@@ -118,16 +124,20 @@ void phonebook::addcontact(string name, string phone, string email) {
     // проверка на дубликат имени
     for (int i = 0; i < contacts.size(); i++) {
         if (contacts[i].name == name) {
-            cout << "Ошибка: Контакт с именем '" << name << "' уже существует!\n";
+            cout << "Ошибка: Контакт с именем '" << name << "' уже существует\n";
             return;
         }
     }
     contact newcontact(name, phone, email);
     contacts.push_back(newcontact);
-    cout << "контакт '" << name << "' добавлен!\n";
+    cout << "контакт '" << name << "' добавлен\n";
 }
 // 2. удаление контакта
 bool phonebook::removecontact(string name) {
+    if (contacts.empty()) {
+        cout<<"Ошибка! список контактов пуст.\n";
+        return false;
+    }
     name = clearspace(name);
     if (name.empty()) {
         cout << "Ошибка: Имя для удаления не может быть пустым!\n";
@@ -147,6 +157,10 @@ bool phonebook::removecontact(string name) {
 
 // 3. изменение контакта
 bool phonebook::editcontact(string oldname, string newname,string newphone, string newemail) {
+    if (contacts.empty()) {
+        cout<<"Ошибка! Cписок контактов пуст.\n";
+        return false;
+    }
     oldname = clearspace(oldname);
     newname = clearspace(newname);
     newphone = clearspace(newphone);
@@ -202,6 +216,10 @@ vector<contact> phonebook::searchbyname(string part) {
 
 // 5. сортировка по имени
 void phonebook::sortbyname() {
+    if (contacts.empty()) {
+        cout<<"Ошибка! Cписок контактов пуст.\n";
+        return;
+    }
     int n = contacts.size();
     for (int i = 0; i < n-1; i++) {
         for (int j = 0; j < n-i-1; j++) {
@@ -213,7 +231,22 @@ void phonebook::sortbyname() {
             }
         }
     }
-    cout << "контакты отсортированы по имени!\n";
+    char choice;
+    do {
+        cout << "Выберите порядок сортировки:\n";
+        cout << "1 - По возрастанию \n";
+        cout << "2 - По убыванию \n";
+        cout << "Ваш выбор: ";
+        cin >> choice;
+        cin.ignore(); // Очистка буфера
+        if (choice != '1' && choice != '2') {
+            cout << "Неверный выбор. Попробуйте снова.\n";
+        }
+    } while (choice != '1' && choice != '2');
+    if (choice == '2') {
+        reverse(contacts.begin(), contacts.end());
+    }
+    cout << "контакты отсортированы по имени.\n";
 }
 // 6. показ всех контактов
 void phonebook::displayall() {

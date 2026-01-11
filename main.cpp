@@ -1,19 +1,24 @@
 #include <iostream>
 #include "ipj.h"
-#include <clocale>
-
 using namespace std;
-
-
 int main() {
-    setlocale(LC_ALL,"Russia");
     phonebook book;
     int choice;
+    setlocale(LC_ALL,"Russia");
     do {
         showmenu();
-        cin >> choice;
-        cin.clear();
-        cin.ignore(1000, '\n');
+        while (true) {
+            cin >> choice;
+            if (cin.fail()) {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "Ошибка! Введите число от 0 до 8!\n";
+                showmenu();
+            } else {
+                cin.ignore(1000, '\n');
+                break;
+            }
+        }
         switch (choice) {
             case 1: {
                 string name, phone, email;
@@ -99,8 +104,8 @@ int main() {
                 break;
             default:
                 cout << "неверный выбор!\n";
+                cout << "Ошибка! Введите число от 0 до 8!\n";
         }
     } while (choice != 0);
-
     return 0;
 }
