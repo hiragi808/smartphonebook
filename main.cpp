@@ -62,7 +62,7 @@ int main() {
                     cout << "\nнайдено " << found.size() << " контактов:\n";
                     for (int i = 0; i < found.size(); i++) {
                         cout << i + 1 << ". " << found[i].name
-                             << " (" << found[i].phone << ")\n";
+                             << " |" << found[i].phone << "| "<<found[i].email<<endl;
                     }
                 }
                 break;

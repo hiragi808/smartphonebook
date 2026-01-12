@@ -60,6 +60,7 @@ bool validname(string name) {
     // Имя не должно содержать запятую, так как она используется как разделитель в файле
     for (char c : name) {
         if (c == ',') {
+            cout<<"Ошибка! Запятые запрещеты для использования."<<endl;
             return false;
         }
     }
@@ -77,6 +78,7 @@ bool validphone(string phone) {
 }
 bool validmail(string mail) {
     // email не обязателен
+    if (mail.length() > 100) return false;
     mail=clearspace(mail);
     if (mail.empty()) {
         return true;
@@ -86,6 +88,10 @@ bool validmail(string mail) {
     for (int i = 0; i < mail.length(); i++) {
         if (mail[i] == '@') {
             aсount++;
+        }
+        if (mail[i] == ',') {
+            cout<<"Ошибка! Запятые запрещеты для использования."<<endl;
+            return false;
         }
     }
     // Должен быть ровно один символ '@'
@@ -193,8 +199,6 @@ bool phonebook::editcontact(string oldname, string newname,string newphone, stri
                 return false;
             }
             cout << "контакт изменен!\n";
-            cout << "было: " << oldname << "\n";
-            cout << "стало: " << newname << "\n";
             return true;
         }
     }
@@ -237,8 +241,8 @@ void phonebook::sortbyname() {
     char choice;
     do {
         cout << "Выберите порядок сортировки:\n";
-        cout << "1 - По возрастанию \n";
-        cout << "2 - По убыванию \n";
+        cout << "1 - По возрастанию (от А до Я) \n";
+        cout << "2 - По убыванию (от Я до А) \n";
         cout << "Ваш выбор: ";
         cin >> choice;
         cin.ignore(); // Очистка буфера
